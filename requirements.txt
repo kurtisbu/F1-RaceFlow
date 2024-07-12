@@ -1,0 +1,4 @@
+Flask
+fastf1
+pandas
+plotly

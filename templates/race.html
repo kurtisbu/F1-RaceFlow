@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block title %}Race Results - F1-RaceFlow{% endblock %}
+
+{% block content %}
+<h1 class="mt-4">Race Results</h1>
+<div class="mb-4">
+    <div id="track-layout"></div>
+</div>
+<div class="mb-4">
+    <div id="lap-time-plot"></div>
+</div>
+<div id="lap-details" class="mt-4">
+    <h2>Lap Details</h2>
+    <div id="telemetry-plots">
+        <div id="speed-plot"></div>
+        <div id="throttle-plot"></div>
+        <div id="brake-plot"></div>
+        <div id="gear-plot"></div>
+        <div id="drs-plot"></div>
+    </div>
+</div>
+<a href="/" class="btn btn-secondary mt-4">Back</a>
+<script>
+    function fetchLapInfo(lapNumber) {
+        var year = "{{ year }}";
+        var grand_prix = "{{ grand_prix }}";
+        var session = "{{ session }}";
+        var driver = "{{ driver }}";
+
+        $.post('/lap_info', {
+            year: year,
+            grand_prix: grand_prix,
+            session: session,
+            driver: driver,
+            lap_number: lapNumber
+        }).done(function(data) {
+            var timeData = data.Time.map(t => new Date(t));
+
+            var speedTrace = {
+                x: timeData,
+                y: data.Speed,
+                mode: 'lines',
+                name: 'Speed'
+            };
+
+            var throttleTrace = {
+                x: timeData,
+                y: data.Throttle,
+                mode: 'lines',
+                name: 'Throttle'
+            };
+
+            var brakeTrace = {
+                x: timeData,
+                y: data.Brake,
+                mode: 'lines',
+                name: 'Brake'
+            };
+
+            var gearTrace = {
+                x: timeData,
+                y: data.Gear,
+                mode: 'lines',
+                name: 'Gear'
+            };
+
+            var drsTrace = {
+                x: timeData,
+                y: data.DRS,
+                mode: 'lines',
+                name: 'DRS'
+            };
+
+            var speedLayout = {
+                title: 'Speed',
+                xaxis: { title: 'Time' },
+                yaxis: { title: 'Speed (km/h)' }
+            };
+
+            var throttleLayout = {
+                title: 'Throttle',
+                xaxis: { title: 'Time' },
+                yaxis: { title: 'Throttle (%)' }
+            };
+
+            var brakeLayout = {
+                title: 'Brake',
+                xaxis: { title: 'Time' },
+                yaxis: { title: 'Brake (%)' }
+            };
+
+            var gearLayout = {
+                title: 'Gear',
+                xaxis: { title: 'Time' },
+                yaxis: { title: 'Gear' }
+            };
+
+            var drsLayout = {
+                title: 'DRS',
+                xaxis: { title: 'Time' },
+                yaxis: { title: 'DRS' }
+            };
+
+            Plotly.newPlot('speed-plot', [speedTrace], speedLayout);
+            Plotly.newPlot('throttle-plot', [throttleTrace], throttleLayout);
+            Plotly.newPlot('brake-plot', [brakeTrace], brakeLayout);
+            Plotly.newPlot('gear-plot', [gearTrace], gearLayout);
+            Plotly.newPlot('drs-plot', [drsTrace], drsLayout);
+        });
+    }
+
+    $(document).ready(function() {
+        var trackLayout = JSON.parse('{{ track_layout_json | safe }}');
+        var lapTimePlot = JSON.parse('{{ lap_time_plot_json | safe }}');
+
+        Plotly.newPlot('track-layout', trackLayout.data, trackLayout.layout);
+        Plotly.newPlot('lap-time-plot', lapTimePlot.data, lapTimePlot.layout);
+
+        document.getElementById('lap-time-plot').on('plotly_click', function(data) {
+            var lapNumber = data.points[0].x;
+            fetchLapInfo(lapNumber);
+        });
+    });
+</script>
+{% endblock %}

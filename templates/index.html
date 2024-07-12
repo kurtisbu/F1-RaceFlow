@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Home - F1-RaceFlow{% endblock %}
+
+{% block content %}
+<h1 class="mt-4">F1-RaceFlow</h1>
+<form action="/race" method="post">
+    <div class="form-group">
+        <label for="year">Year:</label>
+        <select class="form-control" id="year" name="year" onchange="updateGrandPrix()">
+            {% for year in years %}
+            <option value="{{ year }}">{{ year }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="grand_prix">Grand Prix:</label>
+        <select class="form-control" id="grand_prix" name="grand_prix" onchange="updateDrivers()">
+            <!-- Options will be populated dynamically -->
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="session">Session:</label>
+        <select class="form-control" id="session" name="session" onchange="updateDrivers()">
+            {% for session in sessions %}
+            <option value="{{ session }}">{{ session }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="driver">Driver:</label>
+        <select class="form-control" id="driver" name="driver">
+            <!-- Options will be populated dynamically -->
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<script>
+    function updateGrandPrix() {
+        var year = document.getElementById('year').value;
+
+        fetch('/get_grand_prix', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ year: year }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            var grandPrixSelect = document.getElementById('grand_prix');
+            grandPrixSelect.innerHTML = '';
+            data.forEach(gp => {
+                var option = document.createElement('option');
+                option.value = gp;
+                option.text = gp;
+                grandPrixSelect.appendChild(option);
+            });
+            updateDrivers();
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function updateDrivers() {
+        var year = document.getElementById('year').value;
+        var grand_prix = document.getElementById('grand_prix').value;
+        var session = document.getElementById('session').value;
+
+        fetch('/get_drivers', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ year: year, grand_prix: grand_prix, session: session }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            var driverSelect = document.getElementById('driver');
+            driverSelect.innerHTML = '';
+            for (var key in data) {
+                var option = document.createElement('option');
+                option.value = key;
+                option.text = data[key];
+                driverSelect.appendChild(option);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+</script>
+{% endblock %}
