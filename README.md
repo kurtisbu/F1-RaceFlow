@@ -20,7 +20,7 @@ F1-RaceFlow is a web application that allows users to visualize Formula 1 race d
 
 
 ### Laptime
-![Laptime](Images/Laptime.png)
+![Laptime](Images/LapTime.png)
 
 
 ### Lap Details
