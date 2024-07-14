@@ -1,4 +1,4 @@
-
+"""
 # F1-RaceFlow
 
 F1-RaceFlow is a web application that allows users to visualize Formula 1 race data. The app leverages the `fastf1` library to fetch race session data and telemetry, and `plotly` for creating interactive plots.
@@ -9,6 +9,25 @@ F1-RaceFlow is a web application that allows users to visualize Formula 1 race d
 - View interactive track layout and lap times
 - Detailed telemetry data for each lap
 - Separate charts for Speed, Throttle, Brake, Gear, and DRS
+
+## Screenshots
+
+### Selection Screen
+![Selection Screen](images/SelectionScreen.png)
+
+### Track Layout
+![Track Layout](images/TrackLayout.png)
+
+
+### Laptime
+![Laptime](images/Laptime.png)
+
+
+### Lap Details
+![Lap Details](images/LapDetails1.png)
+![Lap Details](images/LapDetails2.png)
+![Lap Details](images/LapDetails3.png)
+
 
 ## Installation
 
@@ -21,7 +40,7 @@ F1-RaceFlow is a web application that allows users to visualize Formula 1 race d
 2. Create and activate a virtual environment:
    ```bash
    python -m venv f1tempo-env
-   source f1tempo-env/bin/activate  # On Windows, use `f1tempo-env\Scripts\activate`
+   source f1tempo-env/bin/activate  # On Windows, use \`f1tempo-env\\Scripts\\activate\`
    ```
 
 3. Install the dependencies:
@@ -55,6 +74,11 @@ F1-RaceFlow/
 │   ├── race.html
 ├── static/
 │   ├── styles.css
+├── images/
+│   ├── selection_screen.png
+│   ├── track_layout.png
+│   ├── laptime.png
+│   ├── lap_details.png
 ├── .gitignore
 ├── requirements.txt
 ├── README.md
@@ -63,3 +87,4 @@ F1-RaceFlow/
 ## License
 
 MIT
+"""
