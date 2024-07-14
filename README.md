@@ -83,8 +83,3 @@ F1-RaceFlow/
 ├── requirements.txt
 ├── README.md
 ```
-
-## License
-
-MIT
-"""
